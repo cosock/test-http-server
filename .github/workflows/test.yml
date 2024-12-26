@@ -1,0 +1,16 @@
+on:
+  pull_request:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: start and hit no-ssl
+        shell: bash
+        run: >
+          cargo build
+          ./target/debug/cosock-test-server &
+          SERVER_PID=$!
+          curl http://127.0.0.1:8080/delay/3
+          kill $SERVER_PID
