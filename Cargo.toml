@@ -8,6 +8,7 @@ repository = "https://github.com/cosock/test-http-server"
 axum = "0.7.9"
 axum-server = { version = "0.7.1", features = ["tls-openssl"] }
 tokio = { version = "1.42.0", features = ["full"] }
+openssl = { version = "0.10", features = ["vendored"] }
 
 # The profile that 'cargo dist' will build with
 [profile.dist]
