@@ -35,6 +35,7 @@ jobs:
           ./target/debug/cosock-test-server 8443 . &
           sleep 1
           SERVER_PID=$!
-          curl https://127.0.0.1:8080/delay/3
+          curl https://127.0.0.1:8443/delay/3
+          EXIT_CODE=$?
           kill $SERVER_PID
-          
+          exit $EXIT_CODE
