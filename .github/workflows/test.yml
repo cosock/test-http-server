@@ -6,12 +6,34 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: build
+        run: cargo build
       - name: start and hit no-ssl
         shell: bash
         run: |
-          cargo build
           ./target/debug/cosock-test-server &
           sleep 1
           SERVER_PID=$!
           curl http://127.0.0.1:8080/delay/3
           kill $SERVER_PID
+      - name: install certs
+        run: |
+          openssl req \
+            -newkey rsa:2048 \
+            -x509 \
+            -sha256 \
+            -days 10000 \
+            -nodes \
+            -out cert.pem \
+            -keyout key.pem \
+            -subj "/C=US/ST=MN/L=Minneapolis/O=cosock/" \
+          && cp cert.pem /usr/local/share/ca-certificates \
+          && update-ca-certificates
+      - name: run-with-tls
+        run: |
+          ./target/debug/cosock-test-server 8443 . &
+          sleep 1
+          SERVER_PID=$!
+          curl https://127.0.0.1:8080/delay/3
+          kill $SERVER_PID
+          
