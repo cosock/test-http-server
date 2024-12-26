@@ -28,7 +28,7 @@ jobs:
             -out cert.pem \
             -keyout key.pem \
             -subj "/C=US/ST=MN/L=Minneapolis/O=cosock/" \
-          && cp cert.pem /usr/local/share/ca-certificates \
+          && cp cert.pem /usr/local/share/ca-certificates || ls /usr/local/share && exit 1 \
           && update-ca-certificates
       - name: run-with-tls
         run: |
