@@ -6,6 +6,7 @@ repository = "https://github.com/cosock/test-http-server"
 
 [dependencies]
 axum = "0.7.9"
+axum-server = { version = "0.7.1", features = ["tls-rustls"] }
 tokio = { version = "1.42.0", features = ["full"] }
 
 # The profile that 'cargo dist' will build with
