@@ -8,9 +8,10 @@ jobs:
     steps:
       - name: start and hit no-ssl
         shell: bash
-        run: >
+        run: |
           cargo build
           ./target/debug/cosock-test-server &
+          sleep 1
           SERVER_PID=$!
           curl http://127.0.0.1:8080/delay/3
           kill $SERVER_PID
