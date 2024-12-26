@@ -29,7 +29,7 @@ jobs:
             -keyout key.pem \
             -subj "/C=US/ST=MN/L=Minneapolis/O=cosock/" \
           && sudo cp cert.pem /usr/local/share/ca-certificates \
-          && update-ca-certificates
+          && sudo update-ca-certificates
       - name: run-with-tls
         run: |
           ./target/debug/cosock-test-server 8443 . &
