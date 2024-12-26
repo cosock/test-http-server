@@ -6,6 +6,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: ls
+        run: ls
       - name: build
         run: cargo build
       - name: start and hit no-ssl
