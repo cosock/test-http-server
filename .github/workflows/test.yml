@@ -13,8 +13,8 @@ jobs:
         shell: bash
         run: |
           ./target/debug/cosock-test-server &
-          sleep 1
           SERVER_PID=$!
+          sleep 1
           curl http://127.0.0.1:8080/delay/3
           kill $SERVER_PID
       - name: install certs
@@ -27,15 +27,15 @@ jobs:
             -nodes \
             -out cert.pem \
             -keyout key.pem \
-            -subj "/C=US/ST=MN/L=Minneapolis/O=cosock/" \
+            -subj "/C=US/ST=MN/L=Minneapolis/O=cosock/CN=cosock/" \
           && sudo cp cert.pem /usr/local/share/ca-certificates \
           && sudo update-ca-certificates
       - name: run-with-tls
         run: |
           ./target/debug/cosock-test-server 8443 . &
-          sleep 1
           SERVER_PID=$!
-          curl https://127.0.0.1:8443/delay/3
+          sleep 1
+          curl -k https://127.0.0.1:8443/delay/3 --cacert ./cert.pem
           EXIT_CODE=$?
           kill $SERVER_PID
           exit $EXIT_CODE
