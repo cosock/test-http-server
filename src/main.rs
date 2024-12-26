@@ -1,7 +1,7 @@
 use std::{net::SocketAddr, path::PathBuf};
 
 use axum::{extract::Path, Router, routing::get};
-use axum_server::tls_rustls::RustlsConfig;
+use axum_server::tls_openssl::OpenSSLConfig;
 
 type Result<T = (), E = Box<dyn std::error::Error>> = std::result::Result<T, E>;
 
@@ -28,15 +28,13 @@ async fn run_http_server(app: Router, port: u16) -> Result {
 
 async fn run_https_server(app: Router, port: u16, cert_dir: PathBuf) -> Result {
     let addr = SocketAddr::from(([127, 0, 0, 1], port));
-    let config = RustlsConfig::from_pem_file(
+    let config = OpenSSLConfig::from_pem_file(
         cert_dir
             .join("cert.pem"),
         cert_dir
             .join("key.pem"),
-    )
-    .await
-    ?;
-    Ok(axum_server::bind_rustls(addr, config)
+    )?;
+    Ok(axum_server::bind_openssl(addr, config)
         .serve(app.into_make_service())
         .await?)
 }
