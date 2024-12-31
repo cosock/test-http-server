@@ -4,7 +4,12 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - name: build
@@ -27,9 +32,7 @@ jobs:
             -nodes \
             -out cert.pem \
             -keyout key.pem \
-            -subj "/C=US/ST=MN/L=Minneapolis/O=cosock/CN=cosock/" \
-          && sudo cp cert.pem /usr/local/share/ca-certificates \
-          && sudo update-ca-certificates
+            -subj "/C=US/ST=MN/L=Minneapolis/O=cosock/CN=cosock/" 
       - name: run-with-tls
         run: |
           ./target/debug/cosock-test-server 8443 . &
